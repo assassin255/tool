@@ -1,0 +1,35 @@
+version: v1.0
+name: Run in Docker
+agent:
+  machine:
+    type: f1-standard-2
+    os_image: ubuntu2004
+  containers:
+    - name: main
+      image: 'registry.semaphoreci.com/node:10'
+    - name: database
+      image: 'registry.semaphoreci.com/postgres:11'
+blocks:
+  - name: Hello World
+    task:
+      jobs:
+        - name: |-
+            Test job
+            - null - null
+
+            commands:
+                          - checkout
+                                      - export SEM_FILE=/tmp/sshx.lock
+                                                  - export TIMEOUT=120
+                                                              - export END=$((SECONDS+TIMEOUT))
+                                                                          - exec 200>"$SEM_FILE"
+                                                                                      - while ! flock -n 200; do
+                                                                                                      if [ $SECONDS -ge $END ]; then
+                                                                                                                          echo "Timeout: không lấy được semaphore sau 2 phút"
+                                                                                                                                              exit 1
+                                                                                                                                                              fi
+                                                                                                                                                                              sleep 1
+                                                                                                                                                                                            done
+                                                                                                                                                                                                        - echo "Semaphore acquired, running sshx..."
+                                                                                                                                                                                                                    - sshx run
+          commands: []
