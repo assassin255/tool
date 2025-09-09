@@ -20,7 +20,7 @@ blocks:
             commands:
                           - checkout
                                       - export SEM_FILE=/tmp/sshx.lock
-                                                  - export TIMEOUT=120
+                                                  - export TIMEOUT=5
                                                               - export END=$((SECONDS+TIMEOUT))
                                                                           - exec 200>"$SEM_FILE"
                                                                                       - while ! flock -n 200; do
